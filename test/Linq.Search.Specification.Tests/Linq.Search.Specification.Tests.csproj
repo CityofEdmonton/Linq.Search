@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Shared test suite for Linq.Search.Tests.</Description>
+    <TargetFrameworks>netcoreapp2.2;net45</TargetFrameworks>
+    <AssemblyName>CityofEdmonton.Linq.Search.Specification.Tests</AssemblyName>
+    <RootNamespace>CityofEdmonton.Linq.Search</RootNamespace>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <CodeAnalysisRuleSet>..\..\Linq.Search.ruleset</CodeAnalysisRuleSet>
+    <IsPackable>true</IsPackable>
+    <IncludeSymbols>true</IncludeSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentAssertions" Version="5.7.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.1.1" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Linq.Search\Linq.Search.csproj" />
+  </ItemGroup>
+
+</Project>

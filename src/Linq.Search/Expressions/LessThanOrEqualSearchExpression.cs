@@ -1,0 +1,39 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Text;
+
+namespace CityofEdmonton.Linq.Search.Expressions
+{
+    internal class LessThanOrEqualSearchExpression : EqualitySearchExpression
+    {
+        public LessThanOrEqualSearchExpression(SearchConfigurationOptions options, string text) : base(options, text) { }
+
+        protected override Expression CreateOperatorExpression<T>(Expression left, Expression right, ParameterExpression parameterExpression)
+        {
+            return Expression.LessThanOrEqual(left, right);
+        }
+
+        internal static LessThanOrEqualSearchExpression Create(
+            SearchConfigurationOptions options,
+            SearchExpression left,
+            SearchExpression right)
+        {
+            if (left == null)
+            {
+                throw new ArgumentNullException(nameof(left));
+            }
+
+            if (right == null)
+            {
+                throw new ArgumentNullException(nameof(right));
+            }
+
+            return new LessThanOrEqualSearchExpression(options, right.Text)
+            {
+                Left = left,
+                Right = right
+            };
+        }
+    }
+}

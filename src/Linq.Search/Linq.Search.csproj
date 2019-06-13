@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Linq.Search provides a way to search collections using a simple query language
+    </Description>
+    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <MinClientVersion>3.6</MinClientVersion>
+    <AssemblyName>CityofEdmonton.Linq.Search</AssemblyName>
+    <RootNamespace>CityofEdmonton.Linq.Search</RootNamespace>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <CodeAnalysisRuleSet>..\..\Linq.Search.ruleset</CodeAnalysisRuleSet>
+    <LangVersion>7.0</LangVersion>
+  </PropertyGroup>
+
+  <!--<ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers" Version="$(StyleCopAnalyzersPackageVersion)" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="..\stylecop.json" />
+  </ItemGroup>-->
+
+  <ItemGroup>
+    <None Update="Properties\CoreStrings.Designer.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CoreStrings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\CoreStrings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CoreStrings.Designer.tt</DependentUpon>
+      <SubType>Designer</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\CoreStrings.resx">
+      <CustomToolNamespace>CityofEdmonton.Linq.Search.Diagnostics</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>
