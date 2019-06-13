@@ -17,8 +17,10 @@ namespace CityofEdmonton.Linq.Search.Expressions
         {
             if (left.Type == typeof(string))
             {
-                //Yay!
-                return Expression.Call(left,
+                // we'll use the null-coalescing operator so we don't get null refernces
+                var nullCoalesceExpression = Expression.Coalesce(left, Expression.Constant(string.Empty));
+
+                return Expression.Call(nullCoalesceExpression,
                     typeof(string).GetMethod("Contains", new[] { typeof(string) }),
                     right);
             }
@@ -36,8 +38,10 @@ namespace CityofEdmonton.Linq.Search.Expressions
                 //        typeof(string).GetMethod("Contains", new[] { typeof(string) }),
                 //        right);
                 var newParam = Expression.Parameter(typeof(string));
+                var newNullCoalesceExpression = Expression.Coalesce(newParam, Expression.Constant(string.Empty));
+
                 var func = Expression.Lambda(
-                    Expression.Call(newParam,
+                    Expression.Call(newNullCoalesceExpression,
                         typeof(string).GetMethod("Contains", new[] { typeof(string) }),
                         right), newParam);
 

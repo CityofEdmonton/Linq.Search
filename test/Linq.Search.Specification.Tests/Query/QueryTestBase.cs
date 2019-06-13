@@ -9,6 +9,7 @@ using Xunit;
 namespace CityofEdmonton.Linq.Search.Query
 {
     // inspired by https://github.com/aspnet/EntityFrameworkCore/blob/master/test/EFCore.Specification.Tests/Query/QueryTestBase.cs
+    [Collection("Sequential")]
     public partial class QueryTestBase
     {
         static QueryTestBase()
