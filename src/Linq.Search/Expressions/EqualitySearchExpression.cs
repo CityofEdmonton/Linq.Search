@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 
 namespace CityofEdmonton.Linq.Search.Expressions
@@ -77,8 +78,10 @@ namespace CityofEdmonton.Linq.Search.Expressions
             // the right side is easy since it is a constant, 
             // however we have to try to force it to the correct type
             var leftType = leftExpression.Type;
+            bool isEnumerable = false;
             if (leftType.IsGenericType && typeof(IEnumerable<>).IsAssignableFrom(leftType.GetGenericTypeDefinition()))
             {
+                isEnumerable = true;
                 // if IEnumerable, get the underlying type
                 leftType = leftType.GetGenericArguments().Single();
             }
@@ -97,7 +100,31 @@ namespace CityofEdmonton.Linq.Search.Expressions
             }
 
             // now all that's left is the operator, which should be supplied by a base class
-            var expr = CreateOperatorExpression<T>(leftExpression, rightExpression, parameterExpression);
+            Expression expr;
+            // special case for IEnumerable types, we need to do an ANY
+            if (isEnumerable)
+            {
+                var anyExpression = typeof(Enumerable).GetMethods(BindingFlags.Public | BindingFlags.Static)
+                    .Where(x => x.Name == "Any")
+                    .Single(mi => mi.GetParameters().Count() == 2)
+                    .MakeGenericMethod(leftType);
+                var newParam = Expression.Parameter(leftType);
+                var subExpression = CreateOperatorExpression<T>(newParam, rightExpression, parameterExpression);
+
+                var func = Expression.Lambda(
+                    subExpression,
+                    newParam);
+
+                expr =  Expression.Call(
+                    anyExpression,
+                    leftExpression,
+                    func);
+            }
+            else
+            {
+                expr = CreateOperatorExpression<T>(leftExpression, rightExpression, parameterExpression);
+            }
+
 
             return Expression.Lambda<Func<T, bool>>(expr, parameterExpression);
 

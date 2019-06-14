@@ -21,7 +21,8 @@ namespace CityofEdmonton.Linq.Search.Query
         private static readonly NorthwindData _northwindData;
 
         protected IQueryable<Customer> Customers => _northwindData.Set<Customer>();
-
+        protected IQueryable<Employee> Employees => _northwindData.Set<Employee>();
+        protected IQueryable<Product> Products => _northwindData.Set<Product>();
 
     }
 }

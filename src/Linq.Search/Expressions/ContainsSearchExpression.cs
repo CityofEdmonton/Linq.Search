@@ -15,46 +15,48 @@ namespace CityofEdmonton.Linq.Search.Expressions
             Expression right,
             ParameterExpression parameterExpression)
         {
+            // we'll need this later in a couple places:
+            var toUpperMethod = typeof(string).GetMethod("ToUpper", Type.EmptyTypes);
+
+            // we'll do our Contains() case insensitive, might as well Upper() the right side now
+            var toUpperExpressionRight = Expression.Call(right, toUpperMethod);
+
+
             if (left.Type == typeof(string))
             {
                 // we'll use the null-coalescing operator so we don't get null refernces
                 var nullCoalesceExpression = Expression.Coalesce(left, Expression.Constant(string.Empty));
 
-                return Expression.Call(nullCoalesceExpression,
+                // and do this case-insensitive (ToUpper() both sides)
+                var toUpperExpressionLeft = Expression.Call(nullCoalesceExpression, toUpperMethod);
+
+                return Expression.Call(Expression.Call(nullCoalesceExpression, toUpperMethod),
                     typeof(string).GetMethod("Contains", new[] { typeof(string) }),
-                    right);
+                    toUpperExpressionRight);
             }
             else if (left.Type == typeof(IEnumerable<string>))
             {
                 // this is harder because we have to do an ANY on the enumeration.
 
-                var overload = typeof(Enumerable).GetMethods(BindingFlags.Public | BindingFlags.Static)
+                var anyExpression = typeof(Enumerable).GetMethods(BindingFlags.Public | BindingFlags.Static)
                         .Where(x => x.Name == "Any")
                         .Single(mi => mi.GetParameters().Count() == 2)
                         .MakeGenericMethod(typeof(string));
 
-                // this obviously doesn't work.
-                //var containsMethod = Expression.Call(left,
-                //        typeof(string).GetMethod("Contains", new[] { typeof(string) }),
-                //        right);
                 var newParam = Expression.Parameter(typeof(string));
                 var newNullCoalesceExpression = Expression.Coalesce(newParam, Expression.Constant(string.Empty));
+                var toUpperExpressionLeft = Expression.Call(newNullCoalesceExpression, toUpperMethod);
 
                 var func = Expression.Lambda(
-                    Expression.Call(newNullCoalesceExpression,
+                    Expression.Call(toUpperExpressionLeft,
                         typeof(string).GetMethod("Contains", new[] { typeof(string) }),
-                        right), newParam);
+                        toUpperExpressionRight),
+                    newParam);
 
-                var call = Expression.Call(
-                    overload,
+                return Expression.Call(
+                    anyExpression,
                     left,
                     func);
-
-                return call;
-
-
-
-                throw new NotImplementedException();
             }
             else if (left.Type == typeof(DateTime) && right.Type == typeof(DateTime))
             {

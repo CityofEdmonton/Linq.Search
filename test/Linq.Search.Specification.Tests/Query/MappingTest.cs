@@ -11,7 +11,17 @@ namespace CityofEdmonton.Linq.Search.Query
     public class MappingTest : QueryTestBase
     {
         [Theory]
+        [InlineData("CustomerID")]
         [InlineData("CompanyName")]
+        [InlineData("ContactName")]
+        [InlineData("ContactTitle")]
+        [InlineData("Address")]
+        [InlineData("City")]
+        [InlineData("Region")]
+        [InlineData("PostalCode")]
+        [InlineData("Country")]
+        [InlineData("Phone")]
+        [InlineData("Fax")]
         public void SearchingNotMappedPropertyThrows(string propertyName)
         {
             SearchConfiguration.ConfigureSearch(options =>
@@ -36,6 +46,20 @@ namespace CityofEdmonton.Linq.Search.Query
                     searchAction.Should().Throw<SearchParseException>();
                 }
             }
+        }
+
+        [Fact]
+        public void CanSearchByAlias()
+        {
+            SearchConfiguration.ConfigureSearch(options =>
+            {
+                options.Entity<Customer>().Map(c => c.City, "location", "place", "town");
+            });
+
+            Customers.Search("location: london").Count().Should().Be(6);
+            Customers.Search("place: lond").Count().Should().Be(6);
+            Customers.Search("town: ondon").Count().Should().Be(6);
+
         }
     }
 }
