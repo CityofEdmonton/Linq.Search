@@ -13,7 +13,7 @@ Linq.Search is a super simple way to search collections that implement the IQuer
 ```csharp
 
 using System.Linq;
-using CityofEdmonton.Linq.Search;
+using Linq.Search;
 
 public class Customer
 {
