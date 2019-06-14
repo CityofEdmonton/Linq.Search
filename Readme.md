@@ -6,7 +6,7 @@ A Super simple filtering library for IQueryables
 
 Linq.Search is a super simple way to search collections that implement the IQueryable<T> interface.
 
-## How to use it (examples)
+## How to use it (examples, from [SimpleQueryTest.cs](https://github.com/CityofEdmonton/Linq.Search/blob/master/test/Linq.Search.Specification.Tests/Query/SimpleQueryTest.cs))
 
 ```csharp
 
@@ -50,12 +50,18 @@ public class CustomerTest
         SearchConfiguration.ConfigureSearch(options =>
         {
             options.Entity<Customer>()
+                .AddDefaultSearchField(c => c.FirstName)
+                .AddDefaultSearchField(c => c.LastName)
+                .AddDefaultSearchField(c => c.City.Name)
                 .Map(c => c.FirstName + " " + c.LastName, alias: "name")
                 .Map(c => c.City.Name, alias: "city")
                 .Map(c => c.City.Country, alias: "country")
                 .Map(c => c.City.Population, alias: "citypop")
                 .Map(c => c.City.Name + " " + c.City.Country, alias: "cityinfo");
         });
+
+        Customers.Search("Name: John OR Edmonton"); // returns John Doe and Joe Smith (in Edmonton)
+
         
         Customers.Search("name: Joe Smith OR name: John"); // return Joe Smith and John doe
 
