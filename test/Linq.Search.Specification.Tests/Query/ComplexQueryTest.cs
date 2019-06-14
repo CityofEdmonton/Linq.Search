@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using FluentAssertions;
+using Linq.Search;
 using Microsoft.EntityFrameworkCore.TestModels.Northwind;
 using Xunit;
 

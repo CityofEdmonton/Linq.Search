@@ -3,6 +3,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using CityofEdmonton.Linq.Search;
 using CityofEdmonton.Linq.Search.Expressions;
+using Linq.Search;
 
 namespace System.Linq
 { 

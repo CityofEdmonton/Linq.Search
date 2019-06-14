@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using CityofEdmonton.Linq.Search;
 
-namespace CityofEdmonton.Linq.Search
+namespace Linq.Search
 {
     public class SearchConfiguration
     {

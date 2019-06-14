@@ -65,6 +65,9 @@ namespace CityofEdmonton.Linq.Search.Expressions
             ParameterExpression parameterExpression,
             EntitySearchConfiguration<T> entityConfig)
         {
+            // we'll need this later in a couple places:
+            var toUpperMethod = typeof(string).GetMethod("ToUpper", Type.EmptyTypes);
+
             var searchField = entityConfig.GetTypeMapping(Left.Text);
             if (searchField == null)
             {
@@ -89,7 +92,10 @@ namespace CityofEdmonton.Linq.Search.Expressions
             if (leftType == typeof(string))
             {
                 // special case for strings, we don't have to convert them
-                rightExpression = Expression.Constant(Right.Text);
+                // but we should uppercase them
+                rightExpression = Expression.Call(
+                    Expression.Constant(Right.Text),
+                    toUpperMethod);
             }
             else
             {
@@ -109,7 +115,9 @@ namespace CityofEdmonton.Linq.Search.Expressions
                     .Single(mi => mi.GetParameters().Count() == 2)
                     .MakeGenericMethod(leftType);
                 var newParam = Expression.Parameter(leftType);
-                var subExpression = CreateOperatorExpression<T>(newParam, rightExpression, parameterExpression);
+                var newLeftExpression = leftType == typeof(string) ? (Expression)Expression.Call(newParam, toUpperMethod) : newParam;
+
+                var subExpression = CreateOperatorExpression<T>(newLeftExpression, rightExpression, parameterExpression);
 
                 var func = Expression.Lambda(
                     subExpression,
@@ -122,6 +130,11 @@ namespace CityofEdmonton.Linq.Search.Expressions
             }
             else
             {
+                // don't forget to uppercase string!
+                if (leftType == typeof(string))
+                {
+                    leftExpression = Expression.Call(leftExpression, toUpperMethod);
+                }
                 expr = CreateOperatorExpression<T>(leftExpression, rightExpression, parameterExpression);
             }
 

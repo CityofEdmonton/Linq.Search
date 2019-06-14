@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using FluentAssertions;
+using Linq.Search;
 using Microsoft.EntityFrameworkCore.TestModels.Northwind;
 using Xunit;
 
@@ -15,12 +16,12 @@ namespace CityofEdmonton.Linq.Search.Query
             SearchConfiguration.ConfigureSearch(options =>
             {
                 var employeeConfig = options.Entity<Employee>();
-                employeeConfig.Map(e => e.Manager.City, "ManagerCity");
+                employeeConfig.Map(e => e.Manager.City, alias: "ManagerCity");
                 employeeConfig.Map(e => e.Manager == null ? "" : e.Manager.FirstName + " " + e.Manager.LastName, "Manager");
 
                 var customerConfig = options.Entity<Customer>();
-                customerConfig.Map(c => c.Orders.Select(y => y.ShipName), "ShipName");
-                customerConfig.Map(c => c.Orders.Select(y => y.Freight), "Freight");
+                customerConfig.Map(c => c.Orders.Select(y => y.ShipName), alias: "ShipName");
+                customerConfig.Map(c => c.Orders.Select(y => y.Freight), alias: "Freight");
             });
         }
 
