@@ -2,6 +2,8 @@
 
 A Super simple filtering library for IQueryables
 
+[![Build Status](https://cityofedmonton.visualstudio.com/CoE%20Utilities/_apis/build/status/Linq.Search?branchName=master)](https://cityofedmonton.visualstudio.com/CoE%20Utilities/_build/latest?definitionId=26&branchName=master)
+
 ## What is Linq.Search?
 
 Linq.Search is a super simple way to search collections that implement the IQueryable<T> interface.
