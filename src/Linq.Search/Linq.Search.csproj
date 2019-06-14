@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Description>Linq.Search provides a way to search collections using a simple query language
     </Description>
-    <TargetFrameworks>netstandard2.0;net45</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <MinClientVersion>3.6</MinClientVersion>
     <AssemblyName>CityofEdmonton.Linq.Search</AssemblyName>
     <RootNamespace>CityofEdmonton.Linq.Search</RootNamespace>
