@@ -43,7 +43,7 @@ steps:
     nobuild: true
     versioningScheme: 'off'
 
-- task: PublishPipelineArtifact@0
+- task: PublishBuildArtifacts@1
   inputs:
-    artifactName: 'package'
-    targetPath: '$(Build.ArtifactStagingDirectory)/*.nupkg'
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: 'package' 
