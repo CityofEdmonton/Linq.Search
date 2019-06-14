@@ -54,12 +54,17 @@ namespace CityofEdmonton.Linq.Search.Query
                 SearchConfiguration.ConfigureSearch(options =>
                 {
                     options.Entity<Customer>()
+                        .AddDefaultSearchField(c => c.FirstName)
+                        .AddDefaultSearchField(c => c.LastName)
+                        .AddDefaultSearchField(c => c.City.Name)
                         .Map(c => c.FirstName + " " + c.LastName, alias: "name")
                         .Map(c => c.City.Name, alias: "city")
                         .Map(c => c.City.Country, alias: "country")
                         .Map(c => c.City.Population, alias: "citypop")
                         .Map(c => c.City.Name + " " + c.City.Country, alias: "cityinfo");
                 });
+
+                Customers.Search("Name: John OR Edmonton").Count().Should().Be(2); // returns John Doe and Joe Smith (in Edmonton)
 
                 Customers.Search("name: Joe Smith OR name: John").Count().Should().Be(2); // return Joe Smith and John doe
 
