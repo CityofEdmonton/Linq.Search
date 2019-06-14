@@ -1,8 +1,0 @@
-{
-	"name": "CityOfEdmonton Linq.Search",
-	"dockerFile": "Dockerfile",
-	"appPort": 9000,
-	"extensions": [
-		"ms-vscode.csharp"
-	]
-}
