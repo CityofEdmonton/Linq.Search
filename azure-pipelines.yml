@@ -15,28 +15,32 @@ variables:
 
 steps:
 - task: DotNetCoreInstaller@0
-  displayName: 'Use .NET Core SDK Tool Installer'
+  displayName: 'Install .NET Core 2.2.100'
   inputs:
     version: 2.2.100    
 
 - task: DotNetCoreCLI@2
+  displayName: 'Restore Nuget Packages'
   inputs:
     command: 'restore'
     projects: '**/*.csproj'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Build Project'
   inputs:
     command: 'build'
     projects: '**/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Run Unit Tests'
   inputs:
     command: 'test'
     projects: '**/*Tests/*.csproj'
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Build Nuget Package'
   inputs:
     command: 'pack'
     packagesToPack: '**/*.csproj'
@@ -44,6 +48,7 @@ steps:
     versioningScheme: 'off'
 
 - task: PublishBuildArtifacts@1
+  displayName: 'Publish Package as Artifact'
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
     artifactName: 'package' 
