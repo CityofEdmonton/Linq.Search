@@ -29,7 +29,7 @@ query = customers.Search("maria or yoshi");
 ```csharp
 // Instead of searching all public string properties,
 // we can configure which ones to search,
-// chich can include related entities.
+// which can include related entities.
 SearchConfiguration.ConfigureSearch(options => 
 {
     options.Entity<Order>()
